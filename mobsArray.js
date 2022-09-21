@@ -7,24 +7,31 @@ class mobsArray {
   get(index) {
     return this.data[index];
   }
-  push(item) {
+  myPush(item) {
     this.data[this.length] = item;
     this.length++;
-    return this.data;
   }
-  pop() {
+  myPop() {
     const lastItem = this.data[this.length - 1];
     delete this.data[this.length - 1];
     this.length--;
     return lastItem;
   }
-  eraseByIndex(index) {
+  myEraseByIndex(index) {
     const item = this.data[index];
     for (let i = index; i < this.length - 1; i++) {
       this.data[i] = this.data[i + 1];
     }
     delete this.data[this.length - 1];
     this.length--;
+    return item;
+  }
+  myUnshift(item) {
+    for (let i = this.length - 1; i >= 0; i--) {
+      this.data[i + 1] = this.data[i];
+    }
+    this.data[0] = item;
+    this.length++;
     return item;
   }
 }
