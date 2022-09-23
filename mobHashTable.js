@@ -2,10 +2,17 @@
 // modern versions of hashmaps use a tree instead of a list (array)
 //i'll make one using trees as soon as i learn whats a tree =)
 
+//Una función criptográfica hash- usualmente conocida como “hash”-
+//es un algoritmo matemático que transforma cualquier bloque arbitrario de datos
+//en una nueva serie de caracteres con una longitud fija.
+//Independientemente de la longitud de los datos de entrada,
+//el valor hash de salida tendrá siempre la misma longitud
+
 class mobHashTable {
   constructor(size) {
     this.data = new Array(size);
   }
+
   //the following method create the hash
   hashMethod(key) {
     let hash = 0;
@@ -26,23 +33,40 @@ class mobHashTable {
     }
     return hash;
   }
+
+  //the following method create a node, inside of it the data lives
+  node(key, value, hash) {
+    return [key, value, hash];
+  }
+
   //the put method push new entries into the structure
   put(key, value) {
-    //here i get the address or hash of the data by using its key
-    const address = this.hashMethod(key);
-    //here I create the bucket where the data with that certain address goes
-    if (!this.data[address]) {
-      this.data[address] = [];
+    //here i get the hash of the data by using its key
+    const hash = this.hashMethod(key);
+    //here I create the bucket where the data with that certain hash goes
+    if (!this.data[hash]) {
+      this.data[hash] = [];
     }
     //here I push the node into the bucket
-    this.data[address].push([key, value]);
+    this.data[hash].push(this.node(key, value, hash));
     return this.data;
   }
-  get(key) {
-    //here i get the address or hash of the data by using its key
-    const address = this.hashMethod(key);
 
-    return this.data[address];
+  get(key) {
+    //here i get the hash of the data by using its key
+    const hash = this.hashMethod(key);
+    //get the bucket where the nodes with that certain data went
+    const bucket = this.data[hash];
+    //now iterate over the bucket to get the node
+    if (bucket) {
+      for (let i = 0; i < bucket.length; i++) {
+        if (bucket[i][0] === key) {
+          return bucket[i][1];
+        }
+      }
+    }
+    //if the key hasnt been putted into the structure the method returns an undefined
+    return undefined;
   }
 }
 
