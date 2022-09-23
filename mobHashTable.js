@@ -11,7 +11,7 @@ class mobHashTable {
     let hash = 0;
     //in this method there are lots of console.log, go the main.js and run these two lines
     //const myData = new mobHashTable(3);
-    //myData.set('aa', 10);
+    //myData.put('aa', 10);
     //open up the console and watch how the hash method runs =)
     console.log('the key is ', key);
     console.log('data length is ', this.data.length);
