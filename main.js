@@ -6,4 +6,6 @@ import { mobHashTable } from './mobHashTable.js';
 // "zppdq" gives me a output hash 2
 
 const myData = new mobHashTable(3);
-myData.set('aa', 10);
+myData.put('aa', 10);
+
+console.log(myData.getValueOf('aaa'));

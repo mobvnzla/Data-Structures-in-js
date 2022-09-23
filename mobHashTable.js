@@ -52,7 +52,7 @@ class mobHashTable {
     return this.data;
   }
 
-  get(key) {
+  getValueOf(key) {
     //here i get the hash of the data by using its key
     const hash = this.hashMethod(key);
     //get the bucket where the nodes with that certain data went
