@@ -30,11 +30,11 @@ class mobHashTable {
   put(key, value) {
     //here i get the address or hash of the data by using its key
     const address = this.hashMethod(key);
-    //here I create the node where the data with that certain address goes
+    //here I create the bucket where the data with that certain address goes
     if (!this.data[address]) {
       this.data[address] = [];
     }
-    //here I push the data into the bucket
+    //here I push the node into the bucket
     this.data[address].push([key, value]);
     return this.data;
   }
