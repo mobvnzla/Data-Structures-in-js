@@ -1,3 +1,6 @@
+//if you've been using js to learn and you get this far you know well whats an array also known as list structure
+//however here's a humble implementation from scratch
+
 class mobsArray {
   constructor() {
     this.length = 0;

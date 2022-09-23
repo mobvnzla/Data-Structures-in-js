@@ -1,13 +1,9 @@
 import { mobsArray } from './mobsArray.js';
+import { mobHashTable } from './mobHashTable.js';
 
-const myList = new mobsArray();
+// "a" gives me a output hash 0
+// "aa" gives me a output hash 1
+// "zppdq" gives me a output hash 2
 
-myList.myPush('mob');
-myList.myPush('has');
-myList.myPush('it');
-
-/* myList.myUnshift('unshift');
-myList.myUnshift('another unshift'); */
-
-myList.myShift();
-console.log(myList.data);
+const myData = new mobHashTable(3);
+myData.set('aa', 10);
