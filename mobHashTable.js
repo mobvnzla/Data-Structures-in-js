@@ -20,16 +20,17 @@ class mobHashTable {
     //const myData = new mobHashTable(3);
     //myData.put('aa', 10);
     //open up the console and watch how the hash method runs =)
-    console.log('the key is ', key);
+
+    /* console.log('the key is ', key);
     console.log('data length is ', this.data.length);
-    console.log('');
+    console.lo g(''); */
 
     for (let i = 0; i < key.length; i++) {
-      console.log('the hash is ', hash);
+      /* console.log('the hash is ', hash); */
       hash = (hash + key.charCodeAt(i) * i) % this.data.length;
-      console.log('after the computed is', hash);
+      /* console.log('after the computed is', hash);
       console.log('and the charcode of the key is ', key.charCodeAt(i));
-      console.log('');
+      console.log(''); */
     }
     return hash;
   }
@@ -67,6 +68,25 @@ class mobHashTable {
     }
     //if the key hasnt been putted into the structure the method returns an undefined
     return undefined;
+  }
+  // https://stackoverflow.com/questions/56659890/possible-to-push-empty-slot-to-an-array
+  erase(key) {
+    //key exist check
+    if (!this.getValueOf(key)) {
+      return undefined;
+    }
+    //here i get the hash
+    const hash = this.hashMethod(key);
+    // then i get the bucket
+    const bucket = this.data[hash];
+    //and here i get the node and kick it out
+    for (let i = 0; i < bucket.length; i++) {
+      if (bucket[i][0] == key) {
+        const dataDeleted = bucket[i];
+        bucket.splice(i, 1);
+        return dataDeleted;
+      }
+    }
   }
 }
 
