@@ -1,16 +1,14 @@
 import { mobsArray } from './mobsArray.js';
 import { mobHashTable } from './mobHashTable.js';
 import { MySinglyLinkedList } from './singlyLinkedList.js';
+import { MyDoubleLinkedList } from './DoublyLinkedList.js';
 
-let myLinkedList = new MySinglyLinkedList(1);
+let myLinkedList = new MyDoubleLinkedList(1);
 
 myLinkedList.append(2);
 myLinkedList.append(3);
-myLinkedList.append(4);
-
 myLinkedList.preappend(0);
-myLinkedList.insert(2, 'mi insert en el index 2');
-myLinkedList.remove(0);
-myLinkedList.remove(0);
+myLinkedList.insert(1, 'algo');
+myLinkedList.remove(2);
 
 console.log(myLinkedList);
