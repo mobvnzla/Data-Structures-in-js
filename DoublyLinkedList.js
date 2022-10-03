@@ -37,8 +37,6 @@ class MyDoubleLinkedList {
     return this;
   }
   insert(index, entry) {
-    //increase the length
-    this.length++;
     // create a new node
     const node = new Node(entry);
     // if length = 1, just append the new node to the list
@@ -57,6 +55,8 @@ class MyDoubleLinkedList {
     previuosNode.next = node;
     node.prev = previuosNode;
     //and that's it
+    //increase the length
+    this.length++;
     return this;
   }
   getNodeByIndex(index) {
@@ -70,8 +70,6 @@ class MyDoubleLinkedList {
     return nodeRequired;
   }
   remove(index) {
-    //decrease the length
-    this.length--;
     // I get the next node to it
     const nextNode = this.getNodeByIndex(index + 1);
     // index = 0 is an special case
@@ -86,6 +84,8 @@ class MyDoubleLinkedList {
     previuosNode.next = nextNode;
     nextNode.prev = previuosNode;
     // and that's it
+    //decrease the length
+    this.length--;
     return this;
   }
 }

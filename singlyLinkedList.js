@@ -30,8 +30,6 @@ class MySinglyLinkedList {
     return this;
   }
   insert(index, entry) {
-    //increase the length
-    this.length++;
     // create a new node
     const node = new Node(entry);
     // if the length is = to 1 just append the new node to the list
@@ -48,6 +46,8 @@ class MySinglyLinkedList {
     // i link it
     previuosNode.next = node;
     //and that's it
+    //increase the length
+    this.length++;
     return this;
   }
   getNodeByIndex(index) {
@@ -61,8 +61,6 @@ class MySinglyLinkedList {
     return nodeRequired;
   }
   remove(index) {
-    //decrease the length
-    this.length--;
     // I get the next node to it
     const nextNode = this.getNodeByIndex(index + 1);
     // index = 0 is an special case
@@ -75,6 +73,8 @@ class MySinglyLinkedList {
     // I link the next node to the previous one
     previuosNode.next = nextNode;
     // and that's it
+    //decrease the length
+    this.length--;
     return this;
   }
 }
