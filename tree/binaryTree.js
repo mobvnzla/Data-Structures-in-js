@@ -28,20 +28,25 @@ class BinrayTree {
     const node = new Node(entry);
     node.level = level;
 
+    //logic of height
+    if (level == this.height) {
+      this.height++;
+    }
+
     // the following logic is about where should the new node goes
     if (entry < parentNode.value) {
       if (!parentNode.left) {
         parentNode.left = node;
-        this.height++;
       } else {
-        this.insert(entry, parentNode.left, level++);
+        level++;
+        this.insert(entry, parentNode.left, level);
       }
     } else {
       if (!parentNode.right) {
         parentNode.right = node;
-        this.height++;
       } else {
-        this.insert(entry, parentNode.right, level++);
+        level++;
+        this.insert(entry, parentNode.right, level);
       }
     }
   }
