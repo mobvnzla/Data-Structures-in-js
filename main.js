@@ -3,12 +3,15 @@ import { mobHashTable } from './mobHashTable.js';
 import { MySinglyLinkedList } from './singlyLinkedList.js';
 import { MyDoubleLinkedList } from './DoublyLinkedList.js';
 import { Stack } from './stack.js';
+import { Queue } from './queue.js';
 
-let myStack = new Stack();
-myStack.myPush('el primer push');
-myStack.myPush('el segundo push');
-myStack.myPush('el tercer push');
-myStack.myPush('el cuarto push');
-myStack.myPop();
+let myStack = new Queue();
+myStack.enqueue('halana');
+myStack.enqueue('enays');
+myStack.enqueue('gilberto');
+myStack.enqueue('jessica');
+myStack.enqueue('mariafrica');
 
-console.log(myStack);
+/* myStack.dequeueByIndex(4); */
+
+console.log(myStack.getNodeByValue('hola'));
