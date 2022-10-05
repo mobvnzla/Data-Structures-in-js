@@ -1,6 +1,7 @@
 class Node {
   constructor(entry) {
     this.value = entry;
+    this.level = null;
     this.left = null;
     this.right = null;
   }
@@ -9,21 +10,40 @@ class Node {
 class BinrayTree {
   constructor(entry) {
     this.root = new Node(entry);
+    this.root.level = 0;
     this.height = 1;
   }
 
-  insert(entry) {
-    const node = new Node(entry);
-    let parentNode = new Node('idk what to put here');
-    if (this.height == 1) {
+  insert(entry, parent, levelOfTheNode) {
+    let parentNode = parent;
+    let level = levelOfTheNode;
+    if (!parentNode) {
       parentNode = this.root;
+      level = 1;
+    }
+    if (entry == parentNode.value) {
+      return console.log('the value already exists');
     }
 
-    if (entry < parentNode.value && !parentNode.left) {
-      parentNode.left = node;
-    } else if (entry > parentNode.value && !parentNode.right) {
-      parentNode.right = node;
-    } else insertNode();
+    const node = new Node(entry);
+    node.level = level;
+
+    // the following logic is about where should the new node goes
+    if (entry < parentNode.value) {
+      if (!parentNode.left) {
+        parentNode.left = node;
+        this.height++;
+      } else {
+        this.insert(entry, parentNode.left, level++);
+      }
+    } else {
+      if (!parentNode.right) {
+        parentNode.right = node;
+        this.height++;
+      } else {
+        this.insert(entry, parentNode.right, level++);
+      }
+    }
   }
 }
 
