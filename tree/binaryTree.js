@@ -14,11 +14,17 @@ class BinrayTree {
 
   insert(entry) {
     const node = new Node(entry);
-    if (!parentNode.left && entry < parentNode.value) {
+    let parentNode = new Node('idk what to put here');
+    if (this.height == 1) {
+      parentNode = this.root;
+    }
+
+    if (entry < parentNode.value && !parentNode.left) {
       parentNode.left = node;
-      this.height++;
-    } else if (!parentNode.right && entry > parentNode.value) {
+    } else if (entry > parentNode.value && !parentNode.right) {
       parentNode.right = node;
     } else insertNode();
   }
 }
+
+export { BinrayTree };
