@@ -23,20 +23,13 @@ class Queue {
     }
     return nodeRequired;
   }
-  /*  
-  //
-  the folloing method is the one i was working on last time i wrote code
-//
-//
-//
-//
-   */
+
   getNodeByValue(entry) {
     let nodeRequired = this.first;
 
     for (let i = 0; i < this.length; i++) {
-      if (nodeRequired == entry) {
-        return nodeRequired;
+      if (nodeRequired.value == entry) {
+        return [nodeRequired, i];
       } else {
         nodeRequired = nodeRequired.next;
       }
@@ -96,19 +89,41 @@ class Queue {
   }
 
   dequeueByValue(entry) {
+    //what if the queue is empty?, then
     if (this.length == 0) {
-      return undefined;
+      return console.log('the queue was already empty');
     }
-    let nodeRequired = this.first;
-    let counter = 0;
-    let nodeFound = false;
-    if (nodeRequired.value == entry) {
+    //what if the value is not in the queue?
+    if (!this.getNodeByValue(entry)) {
+      return console.log('the entry:', entry, ', is not in the queue');
     }
-    while (counter < this.length || nodeFound) {
-      nodeRequired = counter++;
+    //what if the queue has only one item?, then
+    if (this.length == 1) {
+      const nodeRemoved = this.first;
+      this.first = this.last = null;
+      this.length--;
+      return console.log('the following node has been removed:', nodeRemoved, 'now the queue is empty');
+    }
+    //what if the queue has multi-nodes and the entry entered match with the first node
+    const [node, index] = this.getNodeByValue(entry);
+    const previousNode = this.getNodeByIndex(index - 1);
+    previousNode.next = node.next;
+    if (index == this.length - 1) {
+      this.last = previousNode;
+    }
+    this.length--;
+    return console.log('the following node has beed removed:', node);
+  }
+  //peek return the first item and the last item in the queue
+  peek() {
+    if (this.length == 0) {
+      return console.log('the queue is empty');
+    } else if (this.length == 1) {
+      return console.log('the queue has only this item:', this.first);
+    } else {
+      return console.log('the first item is:', this.first, 'and  the last item is:', this.last);
     }
   }
-  /* peek() {} */
 }
 
 export { Queue };

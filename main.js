@@ -12,6 +12,5 @@ myStack.enqueue('gilberto');
 myStack.enqueue('jessica');
 myStack.enqueue('mariafrica');
 
-/* myStack.dequeueByIndex(4); */
-
-console.log(myStack.getNodeByValue('hola'));
+console.log('');
+myStack.peek();
