@@ -1,9 +1,4 @@
-import { mobsArray } from './mobsArray.js';
-import { mobHashTable } from './mobHashTable.js';
-import { MySinglyLinkedList } from './singlyLinkedList.js';
-import { MyDoubleLinkedList } from './DoublyLinkedList.js';
-import { Stack } from './stack.js';
-import { Queue } from './queue.js';
+import { Queue } from './queue/queue.js';
 
 let myStack = new Queue();
 myStack.enqueue('halana');
