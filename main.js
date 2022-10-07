@@ -1,9 +1,7 @@
 import { BinrayTree } from './tree/binaryTree.js';
 
-const myTree = new BinrayTree(10);
-myTree.insert(9);
-myTree.insert(8);
-myTree.insert(7);
-myTree.insert(6);
-
-console.log(myTree);
+const myTree = new BinrayTree();
+myTree.insert(20);
+myTree.insert(10);
+myTree.insert(15);
+myTree.insert(30);
