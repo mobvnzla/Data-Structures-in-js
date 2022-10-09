@@ -30,35 +30,36 @@ class BinrayTree {
     this.height = 0;
   }
 
-  insert(entry, parent = this.root, parentLevel = 0) {
+  insert(entry, parent = this.root) {
+    /* debugger; */
     //friendly warning: entry can be either a node or a number
-    if (!entry && entry != 0) {
-      console.log('entry value not valid');
-      return entry;
+    let rootExist = true;
+
+    //after the check below, we can assume:
+    //1) entry is a valid value
+    //2) root exists or its about to be created
+    //3) entry is not part of the tree
+    const [canIContinue, whyNotMsg] = this.areTheseEntriesPossible(entry, parent);
+    if (!canIContinue) {
+      if (whyNotMsg == 'there is no root') {
+        rootExist = false;
+      } else if (whyNotMsg == 'entry value not valid') {
+        console.log(whyNotMsg);
+        return;
+      }
     }
 
-    //now we check if entry is either a node or a number
-    let node;
-    let nodeValue;
-    let currentLevel = parentLevel;
-    if (entry instanceof Node) {
-      node = entry;
-      nodeValue = entry.value;
-      node.setLevel(currentLevel);
-    } else {
-      node = new Node(+entry, +currentLevel);
-      nodeValue = entry;
-    }
+    //now we process if entry is either a node or a number
+    const [node, nodeValue] = this.processEntry(entry);
 
     //ok, what if there's no root?
-    if (!this.root) {
-      this.root = node;
-      this.height++;
+    if (!rootExist) {
+      this.createRoot(node);
       return this;
     }
     //ok so, from now on there's root
 
-    //the following logic handles when nodeValue already exist
+    /* //the following logic handles when nodeValue already exist
     //but their children dont
     if (this.search(+nodeValue)) {
       if (node.left || node.right) {
@@ -66,10 +67,11 @@ class BinrayTree {
         this.insert(node.right, node, +currentLevel);
       }
       return console.log('value already exists');
-    }
+    } */
 
     //from now on we can assume nodeValue isn't in the tree
     //which means that probably the tree is about to get higher
+    let currentLevel = parent.level;
     currentLevel++;
     node.setLevel(currentLevel);
     if (this.height == currentLevel) {
@@ -79,12 +81,13 @@ class BinrayTree {
     // the following logic determines where should the new node goes
 
     if (nodeValue < parent.value) {
-      !parent.left ? parent.setChild(node, 'left') : this.insert(node, parent.left, currentLevel);
+      !parent.left ? parent.setChild(node, 'left') : this.insert(node, parent.left);
     } else {
-      !parent.right ? parent.setChild(node, 'right') : this.insert(node, parent.right, currentLevel);
+      !parent.right ? parent.setChild(node, 'right') : this.insert(node, parent.right);
     }
   }
 
+  //search method always returns a node
   search(entry = null, parent = this.root) {
     if (!entry && entry != 0) {
       return null;
@@ -102,43 +105,30 @@ class BinrayTree {
   fetchTheParentOf(entry = null, parent = this.root) {
     //friendly warning: entry can be either a node or a number
 
-    //after the checks below, we can assume:
+    //after the check below, we can assume:
     //1) entry is a valid value
     //2) root exists
     //3) entry is part of the tree
-    if (!entry && entry != 0) {
-      console.log('entry value not valid');
-      return entry;
-    }
-    if (parent == null) {
-      return console.log('there is no root');
-    }
-    if (!this.search(entry)) {
-      return console.log('entry isnt part of the tree');
-    }
+    const [canIContinue, whyNotMsg] = this.areTheseEntriesPossible(entry, parent);
+    if (!canIContinue) return console.log(whyNotMsg);
 
-    //now we check if entry is either a node or a number
-    let node;
-    let nodeValue;
-    if (entry instanceof Node) {
-      node = entry;
-      nodeValue = entry.value;
-    } else {
-      node = this.search(entry);
-      nodeValue = +entry;
-    }
+    //now we process if entry is either a node or a number
+    const [node, nodeValue] = this.processEntry(entry);
 
     //the following logic return the parent
-    if (node == parent) {
-      return parent;
+    if (node == this.root) {
+      return this.root;
     } else if (parent.left == node || parent.right == node) {
       return parent;
     } else if (nodeValue < parent.value) {
-      return this.fetchTheParentOf(nodeValue, parent.left);
+      return this.fetchTheParentOf(node, parent.left);
     } else if (nodeValue > parent.value) {
-      return this.fetchTheParentOf(nodeValue, parent.right);
+      return this.fetchTheParentOf(node, parent.right);
     } else {
-      console.log('your node wasnt found but the following node of the three is alike', parent);
+      console.log(
+        'your node wasnt found but the following node of the three is alike, im gonna return its parent',
+        parent,
+      );
       return parent;
     }
   }
@@ -186,6 +176,26 @@ class BinrayTree {
     if (childRight) {
       this.insert(childRight, nodeParent, nodeParent.level);
     }
+  }
+
+  //this method return true when: entry is valid, root exists, entry exists
+  areTheseEntriesPossible(entry = null, parent = this.root) {
+    if (!entry && entry != 0) return [false, 'entry value not valid'];
+    if (parent == null) return [false, 'there is no root'];
+    if (!this.search(entry, parent)) return [false, 'entry isnt part of the tree'];
+    return [true, 'entry is a value valid and exists already'];
+  }
+  processEntry(entry) {
+    if (entry instanceof Node) {
+      return [entry, entry.value];
+    } else {
+      return [new Node(entry), +entry];
+    }
+  }
+  createRoot(nodo) {
+    this.root = nodo;
+    this.root.setLevel(0);
+    this.height = 1;
   }
 }
 
