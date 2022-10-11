@@ -1,0 +1,6 @@
+balancing(theNodewithBalanceof2)
+when -1 > balance > 1 is true, it triggers the balancing method
+
+1)is theNodewithBalanceof2.balance smaller than 0?
+    No -> it's left is longer -> go step 2
+    Yes ->

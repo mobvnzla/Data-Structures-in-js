@@ -1,0 +1,16 @@
+insert(number, parent = root)
+
+1) is there root?
+    No -> create root -> end program !!
+    yes -> go step 2
+
+2) compare number with parent
+    number == parent:true -> node already exist -> end program !!
+    number < parent -> go step 3
+    number > parent -> go step 3
+
+3) parent has child in that direction?
+    No -> insert number there -> end program  !!
+    Yes -> invoke insert(number, child)
+
+done

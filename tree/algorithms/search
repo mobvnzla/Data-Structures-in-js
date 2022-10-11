@@ -1,0 +1,16 @@
+search(number, parent = root)
+
+1) is there root?
+    No -> number doesnt exist -> end program !!
+    Yes -> go step 2
+
+2) compare number with parent
+    number == parent:true -> number found -> end program !!
+    number < parent -> go step 3
+    number > parent -> go step 3
+
+3) parent has child?
+    No -> number doesnt exits -> end program !!
+    Yes -> invoke search(number, child)
+
+done

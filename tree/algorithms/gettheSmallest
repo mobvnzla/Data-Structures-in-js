@@ -1,0 +1,7 @@
+getTheSmallest( startingPointNode)
+
+1) startingPoint has left?
+    No -> startingPointNode is the Smallest
+    Yes -> getTheSmallest(leftChild)
+
+done

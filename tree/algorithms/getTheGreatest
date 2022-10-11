@@ -1,0 +1,7 @@
+getTheGreatest (startingPointNode)
+
+1) startingPointNode has rightChild?
+    No -> startingPointNode is the greatest -> exit program
+    Yes -> getTheGreatest(rightChild)
+
+done
