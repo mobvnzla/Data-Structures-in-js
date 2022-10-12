@@ -1,6 +1,6 @@
 delete(number, parent = root)
 
-1) number == root? (special case)
+1) number == parent? (special case)
     Yes -> run special case -> 5
     No -> go step 2
 
@@ -12,11 +12,11 @@ delete(number, parent = root)
     No -> number doesnt exist -> exit program !!
     Yes -> go step 4
 
-4)number == child of parent ?
+4)number == child of parent in that direction?
     No -> invoke delete(number, child)
     Yes -> number to be delete has been FOUND -> go step 5
 
-5) parent has grandchild in that direction?
+5) number has child in any direction?
     No -> delete number -> exit program !!
     Yes -> go step 6
 
@@ -25,14 +25,14 @@ delete(number, parent = root)
     No -> this means number has 2 children -> go step 7
 
 now we got 2 cases
-case 1) find the smallest number on the right sub tree
-case 2) find the greatest number on the left sub tree
+case 1) find the smallest number on the right sub tree of number
+case 2) find the greatest number on the left sub tree of number
 
 
 7) apply case 2, find the greatest number on the left sub tree by:
-    invoking getTheGreatest(grandchild)
+    invoking getTheGreatest(Childnumber)
 
 8)cut the greatest number by:
-    making a copy of it and deleting the original by invoking delete( greatestNumber, number)
+    making a copy of it and deleting the original by invoking delete( greatestNumber.value, greatestNumber)
 
 done

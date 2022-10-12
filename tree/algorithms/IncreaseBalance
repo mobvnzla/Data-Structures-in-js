@@ -1,0 +1,19 @@
+IncreaseBalance (dir)
+
+1) check dir in order to Increase Balance of the node
+    dir == right -> balance++ -> step 2
+    dir == left -> balance-- -> step 2
+
+2) check node's balance after increase
+is balance smaller than -1 or bigger than 1?
+    Yes -> trigger balance method -> exit program !!
+    No -> go step 3
+
+
+3) compare node with it's parent
+    parent  < this -> NewDir = right -> step 4
+    parent > this -> NewDir = left -> step 4
+
+4) tell to it's parent to increase it's balance by: parent.IncreaseBalance(NewDir)
+
+done

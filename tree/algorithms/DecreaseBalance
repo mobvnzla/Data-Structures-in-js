@@ -1,0 +1,18 @@
+Decrease Balance(dir)
+
+1) check dir in order to decrese balance of the node
+    dir == right -> balance-- -> go step 2
+    dir == left -> balance++ -> go step 2
+
+2) check node's balance after decrease
+is balance smaller than -1 or bigger than 1?
+    Yes -> trigger balance method -> exit program !!
+    No -> go step 3
+
+3) compare node with it's parent
+    parent < node -> NewDir = right -> go step 4
+    parent > node -> NewDir = left -> go step 4
+
+4) tell to its parent to decrese it's balance by: parent.DecreaseBalance(NewDir)
+
+done

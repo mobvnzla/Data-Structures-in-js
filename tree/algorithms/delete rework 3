@@ -1,0 +1,35 @@
+delete (number, parent = root)
+
+1) number exists?: invoke search (number)
+    No -> cant delete anything -> exit program !!
+    Yes -> Fetch it's parent: invoke FetchParent(number) -> step ++
+
+++) check if node to be deleted is also the root -> go step +
+
++) set direction of nodeToBeDeleted
+    parent.left == nodeToBeDeleted -> dir = left -> go step 2
+    parent.right == nodeToBeDeleted -> dir = right -> go step 2
+
+2) number has children?
+    No -> delete its node -> exit program !! (watchout if number is the root)
+    Yes -> step 3
+
+3) number has 1 child?
+    Yes -> replace node with its child -> exit program
+    No -> step 4
+
+4) check balance
+    balance => 0 -> go step 5 case 1
+    balance < 0 -> go step 5 case 2
+
+5) case 1: 
+get the smallest number of the right sub tree: invoke GetTheSmallest( number.RightChild )
+delete the smallest number of the right sub tree: invoke delete( smallestNumber, number.RightChild)
+replace the number you wanna delete with the smallest number found
+
+5) case 2:
+get the greatest number of the left sub tree: invoke GetTheGreatest( number.LeftChild)
+delete the greatest number of the left sub tree: invoke delete( greatestNumber, number.LeftChild)
+replace the number you wanna delete with the greatest number found
+
+done: you can either return what you've deleted or not

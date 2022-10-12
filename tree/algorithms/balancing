@@ -1,6 +1,22 @@
-balancing(theNodewithBalanceof2)
-when -1 > balance > 1 is true, it triggers the balancing method
+balancing(nodeOutOfBalance)
+when (-1 > balance > 1) is true, balancing method should triggers
 
-1)is theNodewithBalanceof2.balance smaller than 0?
-    No -> it's left is longer -> go step 2
-    Yes ->
+1)is nodeOutOfBalance.balance smaller than 0?
+    Yes -> left sub tree is taller -> go step 2 (case 1)
+    No -> right sub tree is taller -> go step 2 (case 2)
+
+2) case 1
+look for the greatest number in the left sub tree: invoke GetTheGreatest( nodeOutOfBalance.left )
+go step 3
+
+2) case 2
+look for the smallest number in the right sub tree: invoke GetTheSmallest ( nodeOutOfBalance.right )
+go step 3
+
+3) replace nodeOutOfBalance with the surrogate (smallest number or greatest number)
+ go step 4
+
+4) insert the nodeOutOfBalance into the tree again
+
+done
+

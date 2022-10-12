@@ -3,17 +3,51 @@
 // https://appliedgo.net/bintree/
 
 class Node {
-  constructor(entry = null) {
-    this.value = entry;
-    this.level = null;
+  constructor(value, parent) {
+    this.value = value;
+    this.parent = parent;
+    this.balance = 0;
     this.left = null;
     this.right = null;
-    this.parent = null;
-    this.balance = 0;
   }
   setChild(node, dir) {
-    /* dir == 'left' ? this.balance++ : this.balance--; */
     dir == 'left' ? (this.left = node) : (this.right = node);
+  }
+  IncreaseBalance(dir) {
+    //step 1
+    dir == 'right' ? this.balance++ : this.balance--;
+
+    //step 2
+    let nodeOutOfBalance;
+    if (this.balance < -1 || this.balance > 1) {
+      nodeOutOfBalance = this;
+      return nodeOutOfBalance;
+    }
+
+    //step 3 and 4
+    if (this.parent != 'itself') {
+      this.parent.value < this.value ? (dir = 'right') : (dir = 'left');
+      nodeOutOfBalance = this.parent.IncreaseBalance(dir);
+    }
+    return nodeOutOfBalance;
+  }
+  DecreaseBalance(dir) {
+    //step 1
+    dir == 'right' ? this.balance-- : this.balance++;
+
+    //step 2
+    let nodeOutOfBalance;
+    if (this.balance < -1 || this.balance > 1) {
+      nodeOutOfBalance = this;
+      return nodeOutOfBalance;
+    }
+
+    //step 3 and 4
+    if (this.parent != 'itself') {
+      this.parent.value < this.value ? (dir = 'right') : (dir = 'left');
+      nodeOutOfBalance = this.DecreaseBalance(dir);
+    }
+    return nodeOutOfBalance;
   }
 }
 
@@ -22,17 +56,14 @@ class BinrayTree {
     this.root = null;
     this.height = 0;
   }
-
+  CreateRoot(number) {
+    this.root = new Node(number, 'itself');
+    this.height = 1;
+  }
   Insert(number, parent = this.root) {
-    /* debugger; */
-    const node = new Node(number);
-
     //is there root?
     if (parent == null) {
-      node.level = 1;
-      node.parent = 'itself';
-      this.height = 1;
-      this.root = node;
+      this.CreateRoot(number);
       return;
     }
 
@@ -49,126 +80,107 @@ class BinrayTree {
 
     //parent has child in that direction?
     if (!parent[dir]) {
-      node.level = parent.level + 1;
-      node.parent = parent;
+      const node = new Node(number, parent);
       parent.setChild(node, dir);
-      node.setBalance(dir);
-      if (this.height < node.level) this.height = node.level;
+      const nodeOutOfBalance = parent.IncreaseBalance(dir);
+      if (nodeOutOfBalance) this.Balance(nodeOutOfBalance);
       return;
     }
     this.Insert(number, parent[dir]);
   }
   Search(number, parent = this.root) {
-    /* debugger; */
-    //is there root?
-    if (parent == null) {
-      return parent;
-    }
-
     //compare number with parent
     let dir;
     if (number == parent.value) {
-      return true;
+      return parent;
     } else if (number < parent.value) {
       dir = 'left';
     } else {
       dir = 'right';
     }
-
     //parent has child in that direction?
     if (!parent[dir]) {
-      return false;
+      return null;
     }
     return this.Search(number, parent[dir]);
   }
   Delete(number, parent = this.root) {
-    //1) step one, deleting root?
-    //2) compare number with parent
-    let dir, destroyRoot;
+    /*   debugger; */
+    //1) number exist?
+    let nodeToBeDeleted = this.Search(number);
+    if (!nodeToBeDeleted) {
+      console.log('cant delete ', number);
+      return;
+    }
+    let parentNode = this.FetchParent(number);
+
+    //++) check if node to be deleted is also the root
+    const destroyRoot = nodeToBeDeleted == parentNode;
+
+    //+) get direction of nodeToBeDeleted according to its parent
+    let dir;
+    if (!destroyRoot) dir = parent.left == nodeToBeDeleted ? 'left' : 'right';
+
+    //2) nodeToBeDelete has no children?
+    if (!nodeToBeDeleted.left && !nodeToBeDeleted.right) {
+      if (destroyRoot) {
+        this.DestroyRoot();
+        return;
+      }
+      dir == 'left' ? (parentNode.left = null) : (parentNode.right = null);
+    }
+    //3) nodeToBeDelete has 1 child?
+    else if (!nodeToBeDeleted.left ^ !nodeToBeDeleted.right) {
+      if (!nodeToBeDeleted.left) {
+        nodeToBeDeleted.right.parent = destroyRoot ? parentNode.parent : parentNode;
+        destroyRoot ? (this.root = nodeToBeDeleted.right) : (nodeToBeDeleted = nodeToBeDeleted.right);
+      } else {
+        nodeToBeDeleted.left.parent = destroyRoot ? parentNode.parent : parentNode;
+        destroyRoot ? (this.root = nodeToBeDeleted.left) : (nodeToBeDeleted = nodeToBeDeleted.left);
+      }
+    }
+    //from now on assume nodeToBeDelete has 2 children
+    //step 4 and 5: do whats better according to balance
+    else {
+      let surrogateNode;
+      if (nodeToBeDeleted.balance >= 0) {
+        surrogateNode = this.GetTheSmallest(nodeToBeDeleted.right);
+        this.Delete(surrogate.value, nodeToBeDeleted.right);
+      } else {
+        surrogateNode = this.GetTheGreatest(nodeToBeDeleted.left);
+        this.Delete(surrogateNode.value, nodeToBeDeleted.left);
+      }
+      nodeToBeDeleted.value = surrogateNode.value;
+    }
+    parentNode.DecreaseBalance(dir);
+  }
+  FetchParent(number, parent = this.root) {
+    //friendly reminder: this method assume number is part of the tree
+    //1) compare number with parent
     if (number == parent.value) {
-      destroyRoot = true;
+      return this.root.value == number ? parent : parent.parent;
     } else if (number < parent.value) {
-      dir = 'left';
-    } else {
-      dir = 'right';
-    }
-    //gotta delete root? special case
-    let biggest;
-    if (destroyRoot) {
-      if (!parent.left && !parent.right) {
-        this.root = null;
-        this.height = 0;
-        return;
-      } else if (parent.left ^ parent.right) {
-        if (parent.left) {
-          return (this.root = parent.left);
-        } else return (this.root = parent.right);
-      } else {
-        biggest = this.getTheGreatest(parent.left);
-        this.Delete(biggest.value, biggest);
-        this.root.value = biggest.value;
-        return;
-      }
-    }
-    //3) parent has child in that direction?
-    if (!parent[dir] && !destroyRoot) {
-      console.log('number to be delete is not part of tree');
-      return;
-    }
-    console.log(parent[dir]);
-    //4) number == child of parent in that direction?
-    if (!number == parent[dir].value && !destroyRoot) {
-      this.Delete(number, parent[dir]);
-    }
-    // from now on the code assumes number has been found
-
-    //5) parent has grandchil in that direction?
-    if (!parent[dir].left || !parent[dir].right) {
-      parent[dir] = null;
-      return;
-    }
-
-    //6) number has 1 child?
-    if (parent[dir].left ^ parent[dir].right) {
-      let childOfnumber;
-      if (parent[dir].left) {
-        childOfnumber = parent[dir].left;
-      } else {
-        childOfnumber = parent[dir].right;
-      }
-      parent[dir] = childOfnumber;
-      return;
-    }
-
-    //7)find the greatest number on the left subtree
-    biggest = this.GetTheGreatest(parent[dir].left);
-
-    //8 apply cut and paste with biggest over number
-    this.Delete(biggest.value, biggest);
-    this.number.value = biggest.value;
+      return this.FetchParent(number, parent.left);
+    } else return this.FetchParent(number, parent.right);
   }
   GetTheGreatest(startingPointNode) {
     //startingPointNode has right child?
     if (!startingPointNode.right) {
-      return startingPointNode.value;
+      return startingPointNode;
     }
-    return this.getTheGreatest(startingPointNode.right);
+    return this.GetTheGreatest(startingPointNode.right);
   }
   GetTheSmallest(startingPointNode) {
     //startingpoingNode has left child?
     if (!startingPointNode.left) {
-      return startingPointNode.value;
+      return startingPointNode;
     }
-    return this.getTheSmallest(startingPointNode.left);
+    return this.GetTheSmallest(startingPointNode.left);
   }
-  setBalance(dir) {
-    /* debugger; */
-    dir == 'left' ? this.balance-- : this.balance++;
-    if (this.parent != 'itself') {
-      let newDir;
-      this.parent.value > this.value ? (newDir = 'right') : (newDir = 'left');
-      this.parent.setBalance(newDir);
-    }
+  Balance(nodeOutOfBalance) {}
+  DestroyRoot() {
+    this.root = null;
+    this.height = 0;
   }
 }
 

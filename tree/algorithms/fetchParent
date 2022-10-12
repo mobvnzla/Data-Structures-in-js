@@ -1,0 +1,9 @@
+fetchParent(number, parent = root)
+
+1) compare number with parent
+    number == parent -> parent found -> return parent.parent exit program !! 
+    number < parent -> fetchParent(node, parent.left)
+    number > parent -> fetchParent(node, parent.right)
+
+
+done: return parent.parent
