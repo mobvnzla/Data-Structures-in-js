@@ -16,9 +16,12 @@ class Node {
   IncreaseBalance(dir) {
     //step 1
     dir == 'right' ? this.balance++ : this.balance--;
+    let nodeOutOfBalance;
+
+    //step *
+    if (this.balance == 0) return nodeOutOfBalance;
 
     //step 2
-    let nodeOutOfBalance;
     if (this.balance < -1 || this.balance > 1) {
       nodeOutOfBalance = this;
       return nodeOutOfBalance;
@@ -34,9 +37,12 @@ class Node {
   DecreaseBalance(dir) {
     //step 1
     dir == 'right' ? this.balance-- : this.balance++;
+    let nodeOutOfBalance;
+
+    //step *
+    if (this.balance == 0) return nodeOutOfBalance;
 
     //step 2
-    let nodeOutOfBalance;
     if (this.balance < -1 || this.balance > 1) {
       nodeOutOfBalance = this;
       return nodeOutOfBalance;
@@ -45,7 +51,7 @@ class Node {
     //step 3 and 4
     if (this.parent != 'itself') {
       this.parent.value < this.value ? (dir = 'right') : (dir = 'left');
-      nodeOutOfBalance = this.DecreaseBalance(dir);
+      nodeOutOfBalance = this.parent.DecreaseBalance(dir);
     }
     return nodeOutOfBalance;
   }
@@ -62,10 +68,7 @@ class BinrayTree {
   }
   Insert(number, parent = this.root) {
     //is there root?
-    if (parent == null) {
-      this.CreateRoot(number);
-      return;
-    }
+    if (parent == null) return this.CreateRoot(number);
 
     //compare number with parent
     let dir;
@@ -74,9 +77,7 @@ class BinrayTree {
       return;
     } else if (number < parent.value) {
       dir = 'left';
-    } else {
-      dir = 'right';
-    }
+    } else dir = 'right';
 
     //parent has child in that direction?
     if (!parent[dir]) {
@@ -84,9 +85,7 @@ class BinrayTree {
       parent.setChild(node, dir);
       const nodeOutOfBalance = parent.IncreaseBalance(dir);
       if (nodeOutOfBalance) this.Balance(nodeOutOfBalance);
-      return;
-    }
-    this.Insert(number, parent[dir]);
+    } else this.Insert(number, parent[dir]);
   }
   Search(number, parent = this.root) {
     //compare number with parent
@@ -105,7 +104,6 @@ class BinrayTree {
     return this.Search(number, parent[dir]);
   }
   Delete(number, parent = this.root) {
-    /*   debugger; */
     //1) number exist?
     let nodeToBeDeleted = this.Search(number);
     if (!nodeToBeDeleted) {
@@ -119,7 +117,7 @@ class BinrayTree {
 
     //+) get direction of nodeToBeDeleted according to its parent
     let dir;
-    if (!destroyRoot) dir = parent.left == nodeToBeDeleted ? 'left' : 'right';
+    if (!destroyRoot) dir = parentNode.left == nodeToBeDeleted ? 'left' : 'right';
 
     //2) nodeToBeDelete has no children?
     if (!nodeToBeDeleted.left && !nodeToBeDeleted.right) {
@@ -127,16 +125,17 @@ class BinrayTree {
         this.DestroyRoot();
         return;
       }
+      nodeToBeDeleted.parent = null;
       dir == 'left' ? (parentNode.left = null) : (parentNode.right = null);
     }
     //3) nodeToBeDelete has 1 child?
     else if (!nodeToBeDeleted.left ^ !nodeToBeDeleted.right) {
       if (!nodeToBeDeleted.left) {
         nodeToBeDeleted.right.parent = destroyRoot ? parentNode.parent : parentNode;
-        destroyRoot ? (this.root = nodeToBeDeleted.right) : (nodeToBeDeleted = nodeToBeDeleted.right);
+        destroyRoot ? (this.root = nodeToBeDeleted.right) : (parentNode[dir] = nodeToBeDeleted.right);
       } else {
         nodeToBeDeleted.left.parent = destroyRoot ? parentNode.parent : parentNode;
-        destroyRoot ? (this.root = nodeToBeDeleted.left) : (nodeToBeDeleted = nodeToBeDeleted.left);
+        destroyRoot ? (this.root = nodeToBeDeleted.left) : (parentNode[dir] = nodeToBeDeleted.left);
       }
     }
     //from now on assume nodeToBeDelete has 2 children
@@ -145,14 +144,17 @@ class BinrayTree {
       let surrogateNode;
       if (nodeToBeDeleted.balance >= 0) {
         surrogateNode = this.GetTheSmallest(nodeToBeDeleted.right);
-        this.Delete(surrogate.value, nodeToBeDeleted.right);
+        this.Delete(surrogateNode.value, nodeToBeDeleted.right);
       } else {
         surrogateNode = this.GetTheGreatest(nodeToBeDeleted.left);
         this.Delete(surrogateNode.value, nodeToBeDeleted.left);
       }
       nodeToBeDeleted.value = surrogateNode.value;
     }
-    parentNode.DecreaseBalance(dir);
+    if (!destroyRoot) {
+      const nodeOutOfBalance = parentNode.DecreaseBalance(dir);
+      if (nodeOutOfBalance) this.Balance(nodeOutOfBalance);
+    }
   }
   FetchParent(number, parent = this.root) {
     //friendly reminder: this method assume number is part of the tree
@@ -167,17 +169,28 @@ class BinrayTree {
     //startingPointNode has right child?
     if (!startingPointNode.right) {
       return startingPointNode;
-    }
-    return this.GetTheGreatest(startingPointNode.right);
+    } else return this.GetTheGreatest(startingPointNode.right);
   }
   GetTheSmallest(startingPointNode) {
     //startingpoingNode has left child?
     if (!startingPointNode.left) {
       return startingPointNode;
-    }
-    return this.GetTheSmallest(startingPointNode.left);
+    } else return this.GetTheSmallest(startingPointNode.left);
   }
-  Balance(nodeOutOfBalance) {}
+  Balance(nodeOutOfBalance) {
+    //step 1 and 2
+    const unbalancePositive = nodeOutOfBalance.balance > 0;
+    const surrogateNode = unbalancePositive
+      ? this.GetTheSmallest(nodeOutOfBalance.right)
+      : this.GetTheGreatest(nodeOutOfBalance.left);
+
+    //step 3
+    const numberToBeReInserted = nodeOutOfBalance.value;
+    this.Delete(surrogateNode.value, nodeOutOfBalance);
+    nodeOutOfBalance.value = surrogateNode.value;
+    //step 4
+    this.Insert(numberToBeReInserted, nodeOutOfBalance);
+  }
   DestroyRoot() {
     this.root = null;
     this.height = 0;

@@ -1,8 +1,15 @@
 IncreaseBalance (dir)
+this revursive operation has 2 base cases:
+case 1) when the balance is smaller than -1 or bigger than 1
+case 2) when balance is 0 after being increased
 
 1) check dir in order to Increase Balance of the node
-    dir == right -> balance++ -> step 2
-    dir == left -> balance-- -> step 2
+    dir == right -> balance++ -> step *
+    dir == left -> balance-- -> step *
+   
+*) is balance == 0?
+    Yes -> exit program !!
+    No -> go step 2
 
 2) check node's balance after increase
 is balance smaller than -1 or bigger than 1?

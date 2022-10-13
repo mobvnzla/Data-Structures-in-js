@@ -1,7 +1,7 @@
 balancing(nodeOutOfBalance)
 when (-1 > balance > 1) is true, balancing method should triggers
 
-1)is nodeOutOfBalance.balance smaller than 0?
+1)is unbalance positve?
     Yes -> left sub tree is taller -> go step 2 (case 1)
     No -> right sub tree is taller -> go step 2 (case 2)
 
