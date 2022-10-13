@@ -1,0 +1,17 @@
+the tree has:
+
+attributes:
+
+1. root: the main node
+2. height: decribes how tall the tree is
+
+methods:
+
+1. Create root: create a root when tree is empty
+2. insert: when entry value doesnt exit the method add a node to the tree
+3. delete: when the entry value is part of the tree the method, find it and erase it
+4. search: returns the node of the entry passed or null if it's not part of the tree
+5. fetch parent: returns the node parent of the entry passed
+6. get the greatest: returns the greatest node found below the entry passed
+7. get the smallest: return the smallest node found below the entry passed
+8. destroy root: it cleans the tree off

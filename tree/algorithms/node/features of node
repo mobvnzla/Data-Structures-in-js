@@ -1,0 +1,15 @@
+Every node has:
+
+attributes:
+
+1. value
+2. parent: a reference to its parent node. (the root node is it's own parent)
+3. balance: a parameter to know if the node is balanced
+4. right: the place where another node with higher value will go
+5. left: the place where another node with lower value will go
+
+methods:
+
+1. setChild: this sets a new node in a certain direction, either left or right
+2. Increase balance: este método ayuda a rastrear el equilibrio del árbol
+3. Decrease balance: same purpose as increase balance method
