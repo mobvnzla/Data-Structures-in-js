@@ -1,13 +1,13 @@
 Decrease Balance(dir)
 this revursive operation has 2 base cases:
 case 1) when the balance is smaller than -1 or bigger than 1
-case 2) when balance is 0 after being decreased
+case 2) when balance is -1 or 1 after being decreased
 
 1) check dir in order to decrese balance of the node
     dir == right -> balance-- -> go step *
     dir == left -> balance++ -> go step *
 
-*) is balance == 0?
+*) is balance == -1 or balance ==1?
     Yes -> exit program !!
     No -> go step 2
 

@@ -1,15 +1,13 @@
 import { BinrayTree } from './tree/binaryTree.js';
 
 const myTree = new BinrayTree();
-myTree.Insert(105);
 myTree.Insert(100);
-myTree.Insert(150);
+myTree.Insert(101);
 myTree.Insert(90);
-myTree.Insert(110);
-myTree.Insert(160);
-myTree.Insert(155);
-myTree.Insert(170);
-myTree.Delete(100);
+myTree.Insert(91);
+myTree.Insert(81);
+myTree.Delete(91);
+myTree.Delete(81);
 
 console.log(myTree);
 /*

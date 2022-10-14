@@ -40,7 +40,7 @@ class Node {
     let nodeOutOfBalance;
 
     //step *
-    if (this.balance == 0) return nodeOutOfBalance;
+    if (this.balance == -1 || this.balance == 1) return nodeOutOfBalance;
 
     //step 2
     if (this.balance < -1 || this.balance > 1) {
