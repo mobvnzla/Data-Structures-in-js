@@ -1,0 +1,12 @@
+path(currentNode, nodeMeta, visited = [], path = [])
+
+1) are nodes adjacent not visited yet?
+    No -> there's no path between correntNode and nodeMeta -> exit program !!
+    Yes -> go step 2
+
+2) is that the node we are looking for?
+    Yes -> path found -> exit program !!
+    No -> go step 1
+
+
+done
